@@ -12,36 +12,48 @@ if (typeof web3 !== 'undefined') {
   web3 = new Web3(web3.currentProvider);
 } else {
   // set the provider you want from Web3.providers
+  console.log("norm")
   web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
 }
+// var tt=web3.eth.personal.newAccount("5551")
 
-
-
-var tt = web3.eth.accounts/* .getBalance("0x0c3c4d686ce1f6aca98a8c692c321c7071311a1e",
+// console.log(web3)      
+/* 
+var tt = web3.eth.getBalance("0xf633405e6386278511647928467ae42e4caaf60d",
 function (err, res) {
-  console.log(res)
-  console.log(res)
-  ethBalance = web3.fromWei(res, "ether");
-  TemplateVar.set(template, "counter", ethBalance)
-  TemplateVar.set(template, "accnumber", textValue) 
+  console.log(err,"err")
+  console.log(res,"res")
+   ethBalance = web3.utils.fromWei(res, "ether");
 }
-)*/
-// console.log(tt)
+) */
+
+var tt = async () => {
+  let getBalance = await web3.eth.getBalance("0xf633405e6386278511647928467ae42e4caaf60d")
+  let fromWei= await web3.utils.fromWei(getBalance,"ether");
+  let personal= await web3.eth.personal.newAccount("5551") 
+}
+tt().catch(err=>{console.log(err)})
+
 
 // Скомпилировать исходный код
-
-/* 
 const input = fs.readFileSync(adres + "/Token.sol", 'utf8');
 const output = solc.compile(input, 1);
 const bytecode = output.contracts[tok].bytecode;
 const abi = JSON.parse(output.contracts[tok].interface);
- */
+
 // Объект контракта
 
 const contract =new web3.eth.Contract(abi);
-/* console.log(web3.eth.getTransaction ())
 //Развертывание экземпляра контракта
-const contractInstance =contract(
+  var contractInstance =new web3.eth.Contract(
+  {
+    data: "0x" + bytecode,
+    from: web3.eth.coinbase,
+    gas: 90000 * 2
+  }
+); 
+ //Развертывание экземпляра контракта
+/*  var contractInstance =new web3.eth.Contract(
   {
     data: "0x" + bytecode,
     from: web3.eth.coinbase,
@@ -63,11 +75,10 @@ const contractInstance =contract(
       testContract(res.address);
     }
   }
-);
-
+);  */
 // Быстрая проверка контракта
 
-function testContract(address) {
+/* function testContract(address) {
   //Ссылка на развернутый контракт
   const token = contract.at(address);
   // Целевая учетная запись для проверки
@@ -86,11 +97,11 @@ function testContract(address) {
     const balance2 = token.balances.call(dest_account);
     console.log(balance2 == 100);
   });
-} */
+}  */
 // response
 app.use(ctx => {
   ctx.body = "Hello Koa";
 });
 
 app.listen(3000);
-
+console.log("fin")
