@@ -51,3 +51,7 @@ if (Meteor.isClient) {
     }
   )
 }
+> eth.coinbase
+> eth.getCoinbase(function(err, cb) { console.log(err, cb); })
+> eth.accounts
+> eth.getAccounts(function(err, accounts) { console.log(err, accounts); })

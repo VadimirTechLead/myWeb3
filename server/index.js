@@ -31,9 +31,13 @@ var tt = async () => {
   let getBalance = await web3.eth.getBalance("0xf633405e6386278511647928467ae42e4caaf60d")
   let fromWei= await web3.utils.fromWei(getBalance,"ether");
   let personal= await web3.eth.personal.newAccount("5551") 
+  let getCoinbase= await web3.eth.getCoinbase()
+  name_1 (getCoinbase)
 }
-tt().catch(err=>{console.log(err)})
+tt().catch(err=>{console.log(err,"catch")})
 
+function name_1 (getCoinbase) {
+  
 
 // Скомпилировать исходный код
 const input = fs.readFileSync(adres + "/Token.sol", 'utf8');
@@ -42,16 +46,20 @@ const bytecode = output.contracts[tok].bytecode;
 const abi = JSON.parse(output.contracts[tok].interface);
 
 // Объект контракта
-
+var tt1=web3.eth.coinbase
+var ii1=bytecode
 const contract =new web3.eth.Contract(abi);
 //Развертывание экземпляра контракта
   var contractInstance =new web3.eth.Contract(
   {
-    data: "0x" + bytecode,
+    data: getCoinbase,
     from: web3.eth.coinbase,
     gas: 90000 * 2
   }
 ); 
+}
+
+// //////////////////////
  //Развертывание экземпляра контракта
 /*  var contractInstance =new web3.eth.Contract(
   {
