@@ -1,0 +1,25 @@
+{
+  "name": "myweb3",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {
+    "koa": "^2.5.0",
+    "solc": "^0.4.20",
+    "web3": "^1.0.0-beta.30"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/slonik6663444/myWeb3.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/slonik6663444/myWeb3/issues"
+  },
+  "homepage": "https://github.com/slonik6663444/myWeb3#readme"
+}
