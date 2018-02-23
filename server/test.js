@@ -25,7 +25,7 @@ if (Meteor.isClient) {
  
 
 
-fgeth --dev --rpc --rpccorsdomain "*" --networkid 8545 --minerthreads 1 --rpcapi "admin,debug,miner,shh,txpooll,personal,eth,net,web3" console
+geth --dev --rpc --rpccorsdomain "*" --networkid 8545 --minerthreads 1 --rpcapi "admin,debug,miner,shh,txpooll,personal,eth,net,web3" console
 
 import { Template } from 'meteor/templating';
 import { ReactiveVar } from 'meteor/reactive-var';

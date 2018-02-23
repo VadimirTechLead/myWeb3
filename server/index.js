@@ -3,21 +3,22 @@ const Koa = require("koa");
 const app = new Koa();
 const solc = require("solc");
 const Web3 = require("web3");
-const path = require('path');
-const adres=path.resolve(__dirname)
-const tok=":TokenERC20"
+const path = require("path");
+const adres = path.resolve(__dirname);
+const _ = require('lodash');
+const tok = ":TokenERC20";
 // Подключение к локальному узлу Ethereum
-if (typeof web3 !== 'undefined') {
-  console.log( "undefined")
+if (typeof web3 !== "undefined") {
+  console.log("undefined");
   web3 = new Web3(web3.currentProvider);
 } else {
   // set the provider you want from Web3.providers
-  console.log("norm")
+  console.log("norm");
   web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
 }
 // var tt=web3.eth.personal.newAccount("5551")
 
-// console.log(web3)      
+// console.log(web3)
 /* 
 var tt = web3.eth.getBalance("0xf633405e6386278511647928467ae42e4caaf60d",
 function (err, res) {
@@ -28,39 +29,61 @@ function (err, res) {
 ) */
 
 var tt = async () => {
-  let getBalance = await web3.eth.getBalance("0xf633405e6386278511647928467ae42e4caaf60d")
-  let fromWei= await web3.utils.fromWei(getBalance,"ether");
-  let personal= await web3.eth.personal.newAccount("5551") 
-  let getCoinbase= await web3.eth.getCoinbase()
-  name_1 (getCoinbase)
-}
-tt().catch(err=>{console.log(err,"catch")})
-
-function name_1 (getCoinbase) {
+  // let personal = await web3.eth.personal.newAccount("555");
+  let personal = await web3.eth.personal.unlockAccount(
+    "0x72b1048ef13b9c363ddd063bff0ca0a86b563d9c",
+    "555"
+  );
+  let getBalance = await web3.eth.getBalance(
+    "0x72b1048ef13b9c363ddd063bff0ca0a86b563d9c"
+  );
+  let fromWei = await web3.utils.fromWei(getBalance, "ether");
+  let getCoinbase = await web3.eth.getCoinbase();
+  // Скомпилировать исходный код
+  const input = fs.readFileSync(adres + "/Token.sol", "utf8");
+  const output = solc.compile(input, 1);
+  const bytecode = output.contracts[tok].bytecode;
+  const abi = JSON.parse(output.contracts[tok].interface);
   
+  // Объект контракта
+  var tt1 = web3.eth.coinbase;
+  var ii1 = bytecode;
+  var kk = web3.eth.coinbase;
+  let contract = await new web3.eth.Contract(abi);
+  //Развертывание экземпляра контракта
+  var contractInstance = await new web3.eth.Contract(
+    abi,
+    "0xf633405e6386278511647928467ae42e4caaf60d",
+    {
+      // data: abi,
+      from: getCoinbase,
+      gas: 90000 * 2
+    }
+  );
+  
+//    var obg=contractInstance;
+//    var tt=JSON.stringify(web3,null," ");
+//  fs.appendFile(adres + "/web3.txt",tt, (err) => {if (err) throw err});
+  // var obg=_.find([{BatchRequest:555}], 'BatchRequest');
+  // var contractRes = await web3.eth.Contract.test()
+  // console.log(contractInstance, "getBalance");
+  // console.log(personal, "personal");
+  // console.log(getCoinbase, "getCoinbase");
+  name_1();
+};
+tt().catch(err => {
+  console.log(err, "catch");
+});
 
-// Скомпилировать исходный код
-const input = fs.readFileSync(adres + "/Token.sol", 'utf8');
-const output = solc.compile(input, 1);
-const bytecode = output.contracts[tok].bytecode;
-const abi = JSON.parse(output.contracts[tok].interface);
+function name_1() {
+  console.log("11115555");
 
-// Объект контракта
-var tt1=web3.eth.coinbase
-var ii1=bytecode
-const contract =new web3.eth.Contract(abi);
-//Развертывание экземпляра контракта
-  var contractInstance =new web3.eth.Contract(
-  {
-    data: getCoinbase,
-    from: web3.eth.coinbase,
-    gas: 90000 * 2
-  }
-); 
+  // var uuu = contractInstance.at("0x0d64590C908B0D5356543e2bFE8D776988cd2E4A")
+  // console.log(uuu)
 }
 
 // //////////////////////
- //Развертывание экземпляра контракта
+//Развертывание экземпляра контракта
 /*  var contractInstance =new web3.eth.Contract(
   {
     data: "0x" + bytecode,
@@ -111,5 +134,5 @@ app.use(ctx => {
   ctx.body = "Hello Koa";
 });
 
-app.listen(3000);
-console.log("fin")
+app.listen(3001);
+console.log("fin");

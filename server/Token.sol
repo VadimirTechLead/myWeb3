@@ -93,8 +93,8 @@ contract TokenERC20 {
      * @param _spender The address authorized to spend
      * @param _value the max amount they can spend
      */
-    function approve(address _spender, uint256 _value) public
-        returns (bool success) {
+    function approve(address _spender, uint256 _value) public returns (bool success) {
+        
         allowance[msg.sender][_spender] = _value;
         return true;
     }
@@ -108,9 +108,8 @@ contract TokenERC20 {
      * @param _value the max amount they can spend
      * @param _extraData some extra information to send to the approved contract
      */
-    function approveAndCall(address _spender, uint256 _value, bytes _extraData)
-        public
-        returns (bool success) {
+    function approveAndCall(address _spender,uint256 _value,bytes _extraData)  public returns (bool success) {
+
         tokenRecipient spender = tokenRecipient(_spender);
         if (approve(_spender, _value)) {
             spender.receiveApproval(msg.sender, _value, this, _extraData);
@@ -151,4 +150,7 @@ contract TokenERC20 {
         return true;
     }
 
+        function test() pure public returns(uint) {
+            return 12345;
+        }
 }
