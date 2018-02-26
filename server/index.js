@@ -5,8 +5,9 @@ const solc = require("solc");
 const Web3 = require("web3");
 const path = require("path");
 const adres = path.resolve(__dirname);
-const _ = require('lodash');
+const _ = require("lodash");
 const tok = ":TokenERC20";
+const port = 3001;
 // Подключение к локальному узлу Ethereum
 if (typeof web3 !== "undefined") {
   console.log("undefined");
@@ -16,41 +17,46 @@ if (typeof web3 !== "undefined") {
   console.log("norm");
   web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
 }
-// var tt=web3.eth.personal.newAccount("5551")
-
-// console.log(web3)
-/* 
-var tt = web3.eth.getBalance("0xf633405e6386278511647928467ae42e4caaf60d",
-function (err, res) {
-  console.log(err,"err")
-  console.log(res,"res")
-   ethBalance = web3.utils.fromWei(res, "ether");
-}
-) */
-
 var tt = async () => {
-  // let personal = await web3.eth.personal.newAccount("555");
-  let personal = await web3.eth.personal.unlockAccount(
-    "0x72b1048ef13b9c363ddd063bff0ca0a86b563d9c",
-    "555"
+  //  let personal = await web3.eth.personal.newAccount("66776");
+  // console.log(personal)
+  let getBalance = await web3.eth.getBalance("0x352af4b9caefedadd95ac77d1cdabd9741ec4621");
+  /* 
+  console.log(getBalance, "getBalance до перевода" );
+   let personal_2 = await web3.eth.personal.unlockAccount(
+    "0x352af4b9caefedadd95ac77d1cdabd9741ec4621",
+    "555",
+    6000
   );
-  let getBalance = await web3.eth.getBalance(
-    "0x72b1048ef13b9c363ddd063bff0ca0a86b563d9c"
+  console.log(personal_2, "разблокировка акаунта" );
+  let getBalance_user2 = await web3.eth.getBalance(
+    "0xd7843c42df925c9a8a87d46b821ff6664f37d82e"
+  );  
+  
+   let sendTransaction = await web3.eth.sendTransaction({from:"0x352af4b9caefedadd95ac77d1cdabd9741ec4621", to:'0xd7843c42df925c9a8a87d46b821ff6664f37d82e', value: web3.toWei(100, "ether")})
+   
+   let getBalance_user_2_2 = await web3.eth.getBalance(
+    "0xd7843c42df925c9a8a87d46b821ff6664f37d82e"
   );
-  let fromWei = await web3.utils.fromWei(getBalance, "ether");
+   console.log(getBalance_user2,getBalance_user_2_2)
+  // console.log(sendTransaction)
+  let getBalance_2 = await web3.eth.getBalance(
+    "0x352af4b9caefedadd95ac77d1cdabd9741ec4621"
+  ); 
+  // console.log(personal_2,"personal_2 ");
+  console.log(getBalance_2, "getBalance до после перевода" );*/
+ 
+   let fromWei = await web3.utils.fromWei(getBalance, "ether");
   let getCoinbase = await web3.eth.getCoinbase();
   // Скомпилировать исходный код
   const input = fs.readFileSync(adres + "/Token.sol", "utf8");
   const output = solc.compile(input, 1);
   const bytecode = output.contracts[tok].bytecode;
   const abi = JSON.parse(output.contracts[tok].interface);
-  
-  // Объект контракта
-  var tt1 = web3.eth.coinbase;
-  var ii1 = bytecode;
-  var kk = web3.eth.coinbase;
+
+ // Объект контракта
   let contract = await new web3.eth.Contract(abi);
-  //Развертывание экземпляра контракта
+   //Развертывание экземпляра контракта
   var contractInstance = await new web3.eth.Contract(
     abi,
     "0xf633405e6386278511647928467ae42e4caaf60d",
@@ -60,53 +66,27 @@ var tt = async () => {
       gas: 90000 * 2
     }
   );
-  
-//    var obg=contractInstance;
-//    var tt=JSON.stringify(web3,null," ");
-//  fs.appendFile(adres + "/web3.txt",tt, (err) => {if (err) throw err});
-  // var obg=_.find([{BatchRequest:555}], 'BatchRequest');
-  // var contractRes = await web3.eth.Contract.test()
-  // console.log(contractInstance, "getBalance");
-  // console.log(personal, "personal");
-  // console.log(getCoinbase, "getCoinbase");
+  // //Войдите в систему tx, вы можете изучить статус с помощью eth.getTransaction ()
+  // console.log(res.transactionHash);
+
+  // // Если у нас есть свойство адреса, контракт был развернут
+  // if (res.address) {
+  //   console.log("Contract address: " + res.address);
+  //   // Let's test the deployed contract
+  //   testContract(res.address);
+  // }
   name_1();
 };
 tt().catch(err => {
-  console.log(err, "catch");
+  console.log(err, "catch eror");
 });
 
 function name_1() {
-  console.log("11115555");
+  console.log("super");
 
   // var uuu = contractInstance.at("0x0d64590C908B0D5356543e2bFE8D776988cd2E4A")
   // console.log(uuu)
 }
-
-// //////////////////////
-//Развертывание экземпляра контракта
-/*  var contractInstance =new web3.eth.Contract(
-  {
-    data: "0x" + bytecode,
-    from: web3.eth.coinbase,
-    gas: 90000 * 2
-  },
-  (err, res) => {
-    if (err) {
-      console.log(err);
-      return;
-    }
-
-    //Войдите в систему tx, вы можете изучить статус с помощью eth.getTransaction ()
-    console.log(res.transactionHash);
-
-    // Если у нас есть свойство адреса, контракт был развернут
-    if (res.address) {
-      console.log("Contract address: " + res.address);
-      // Let's test the deployed contract
-      testContract(res.address);
-    }
-  }
-);  */
 // Быстрая проверка контракта
 
 /* function testContract(address) {
@@ -134,5 +114,5 @@ app.use(ctx => {
   ctx.body = "Hello Koa";
 });
 
-app.listen(3001);
-console.log("fin");
+app.listen(port);
+console.log("сервер запущен на " + port + " порту");
