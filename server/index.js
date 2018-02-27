@@ -1,13 +1,13 @@
 const fs = require("fs");
-const Koa = require("koa");
-const app = new Koa();
+var express = require('express')
+var app = express()
 const solc = require("solc");
 const Web3 = require("web3");
 const path = require("path");
 const adres = path.resolve(__dirname);
 const _ = require("lodash");
 const tok = ":TokenERC20";
-const port = 3001;
+const port = 80;
 // Подключение к локальному узлу Ethereum
 if (typeof web3 !== "undefined") {
   console.log("undefined");
@@ -20,7 +20,7 @@ if (typeof web3 !== "undefined") {
 var tt = async () => {
   //  let personal = await web3.eth.personal.newAccount("66776");
   // console.log(personal)
-  let getBalance = await web3.eth.getBalance("0x352af4b9caefedadd95ac77d1cdabd9741ec4621");
+  //let getBalance = await web3.eth.getBalance("0x352af4b9caefedadd95ac77d1cdabd9741ec4621");
   /* 
   console.log(getBalance, "getBalance до перевода" );
    let personal_2 = await web3.eth.personal.unlockAccount(
@@ -45,8 +45,8 @@ var tt = async () => {
   ); 
   // console.log(personal_2,"personal_2 ");
   console.log(getBalance_2, "getBalance до после перевода" );*/
- 
-   let fromWei = await web3.utils.fromWei(getBalance, "ether");
+
+  /*  let fromWei = await web3.utils.fromWei(getBalance, "ether");
   let getCoinbase = await web3.eth.getCoinbase();
   // Скомпилировать исходный код
   const input = fs.readFileSync(adres + "/Token.sol", "utf8");
@@ -65,7 +65,7 @@ var tt = async () => {
       from: getCoinbase,
       gas: 90000 * 2
     }
-  );
+  ); */
   // //Войдите в систему tx, вы можете изучить статус с помощью eth.getTransaction ()
   // console.log(res.transactionHash);
 
@@ -110,9 +110,41 @@ function name_1() {
   });
 }  */
 // response
-app.use(ctx => {
-  ctx.body = "Hello Koa";
-});
 
-app.listen(port);
+
+var options = {
+  dotfiles: 'ignore',
+  etag: false,
+  extensions: ['htm', 'html'],
+  index: false,
+  maxAge: '1d',
+  redirect: false,
+  setHeaders: function (res, path, stat) {
+    res.set('x-timestamp', Date.now())
+  }
+}
+app.use('/public', express.static('public', options))
+app.get('/', function (req, res) {
+   let tt=adres.slice(0,-6);
+  // let tt_1=res.sendFile("R:/sunduchek/myWeb3/public/index.html"/* adres.slice(0,adres.indexOf('/'))+ '/server/index.html' */)
+  // console.log("llllll")
+  var options = {
+    root: adres.slice(0,-6) + 'public\\',
+    dotfiles: 'deny',
+    headers: {
+      'x-timestamp': Date.now(),
+      'x-sent': true
+    }
+  };
+  res.sendFile('index.html', options, function (err) {
+    if (err) {
+      console.log('Sent:', err);
+    } else {
+      console.log('Sent:');
+    }
+  });
+  // res.end();
+})
+
+app.listen(port)
 console.log("сервер запущен на " + port + " порту");
